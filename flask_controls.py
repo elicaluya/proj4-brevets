@@ -45,7 +45,7 @@ def index():
 @app.errorhandler(404)
 def page_not_found(error):
     app.logger.debug("Page not found")
-    flask.session['linkback'] =  flask.url_for("/")
+    flask.session['linkback'] =  flask.url_for("index")
     return flask.render_template('page_not_found.html'), 404
 
 
@@ -63,10 +63,18 @@ def _calc_times():
   Expects one URL-encoded argument, the number of miles. 
   """
   app.logger.debug("Got a JSON request");
-  km = request.args.get('km', 0, type=int)
-  #FIXME: These probably aren't the right open and close times
-  open_time = acp_times.open_time(km, 200, arrow.now().isoformat)
-  close_time = acp_times.close_time(km, 200, arrow.now().isoformat)
+  km = request.args.get('km',0, type=float)
+  brevet = request.args.get('distance',200,type=int)
+  
+  # Get begin date and begin time from html file and convert them into a string so they
+  # can be turned into an arrow object for computing open and close times
+  start_date = request.args.get('begin_date',type=str)
+  start_time = request.args.get('begin_time',type=str)
+  begin = str(start_date) + " " + str(start_time)
+  start = arrow.get(begin , 'YYYY-MM-DD HH:mm', tzinfo = tz.tzlocal())
+  
+  open_time = acp_times.open_time(km, brevet, start)
+  close_time = acp_times.close_time(km, brevet, start)
   result={ "open": open_time, "close": close_time }
   return jsonify(result=result)
 
