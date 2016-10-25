@@ -4,6 +4,13 @@ Reimplement the RUSA ACP controle time calculator with flask and ajax
 
 Author: Elijah Caluya
 
+## To Run
+To run the program you must first type 'make config' into the terminal while in the
+ proj4-brevets directory. This is will make an env directory in your directory. 
+ You then type in 'source env/bin/activate' to create the virtual environment from where
+ the program will run. You then type 'python3 flask_controls.py' and then go into a 
+ web browser and type in 'localhost:5000' and that will bring you to the program.
+
 ## ACP controle times
 
 That's "controle" with an 'e', because it's French, although "control"
